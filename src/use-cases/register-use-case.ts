@@ -1,11 +1,16 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import bcrypt from "bcrypt";
 import { PrismaUsersRepository } from '../repositories/prisma-users-repository'
+import { User } from "@prisma/client";
 
 interface RegisterUseCaseRequest {
   name: string;
   email: string;
   password: string;
+}
+
+interface RegisterUseCaseResponse {
+  user: User
 }
 
 export class RegisterUseCase {
@@ -22,10 +27,14 @@ export class RegisterUseCase {
       throw new Error('Email already exists')
     }
 
-    await this.usersRepository.create({
+    const user = await this.usersRepository.create({
       name,
       email,
-      password_hash: await bcrypt.hashh(password, 6),
+      password_hash: await bcrypt.hash(password, 6),
     });
+    return {
+      user
+    }
   }
 }
+
