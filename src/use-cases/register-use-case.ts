@@ -25,7 +25,7 @@ export class RegisterUseCase {
     await this.usersRepository.create({
       name,
       email,
-      password_hash: await bcrypt.hash(password, 6),
+      password_hash: await bcrypt.hashh(password, 6),
     });
   }
 }
